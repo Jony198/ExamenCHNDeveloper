@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: chn_sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password12345
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    networks:
+      - chn_net
+
+  backend:
+    image: openjdk:17-jdk-slim
+    container_name: chn_backend
+    depends_on:
+      - sqlserver
+    volumes:
+      - ./target:/app
+    working_dir: /app
+    command: ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://sqlserver:1433;databaseName=BancoCHN;encrypt=false
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=Password12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    networks:
+      - chn_net
+
+volumes:
+  sqlserver_data:
+
+networks:
+  chn_net:
