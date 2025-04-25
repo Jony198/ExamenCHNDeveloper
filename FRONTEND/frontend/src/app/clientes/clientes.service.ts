@@ -17,8 +17,11 @@ export interface BackendResponse {
   body: any;
   statusCode: any;
   statusCodeValue: any;
+  errores:any;
 }
-
+export interface ClienteResponse extends BackendResponse {
+  clientes?: any;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -27,23 +30,23 @@ export class ClientesService {
 
   constructor(private http: HttpClient) {}
 
-  listar(): Observable<BackendResponse> {
-    return this.http.get<BackendResponse>(this.apiUrl);
+  listar(): Observable<ClienteResponse> {
+    return this.http.get<ClienteResponse>(this.apiUrl);
   }
 
-  crear(cliente: Cliente): Observable<Cliente> {
-    return this.http.post<Cliente>(this.apiUrl, cliente);
+  crear(cliente: Cliente): Observable<BackendResponse> {
+    return this.http.post<BackendResponse>(this.apiUrl, cliente);
   }
 
-  obtenerPorId(id: number): Observable<Cliente> {
-    return this.http.get<Cliente>(`${this.apiUrl}/${id}`);
+  obtenerPorId(id: number): Observable<ClienteResponse> {
+    return this.http.get<ClienteResponse>(`${this.apiUrl}/${id}`);
   }
 
-  actualizar(id: number, cliente: Cliente): Observable<Cliente> {
-    return this.http.put<Cliente>(`${this.apiUrl}/${id}`, cliente);
+  actualizar(id: number, cliente: Cliente): Observable<BackendResponse> {
+    return this.http.put<BackendResponse>(`${this.apiUrl}/${id}`, cliente);
   }
 
-  eliminar(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+  eliminar(id: number): Observable<BackendResponse> {
+    return this.http.delete<BackendResponse>(`${this.apiUrl}/${id}`);
   }
 }

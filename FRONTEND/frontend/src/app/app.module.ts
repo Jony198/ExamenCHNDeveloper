@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { ListarClientesComponent } from './clientes/listar-clientes/listar-clientes.component';
 import { CrearClienteComponent } from './clientes/crear-cliente/crear-cliente.component';
 import { EditarClienteComponent } from './clientes/editar-cliente/editar-cliente.component';
+import { NavbarComponent } from './layout/navbar/navbar.component';
 
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -22,7 +23,8 @@ const routes: Routes = [
     AppComponent,
     ListarClientesComponent,
     CrearClienteComponent,
-    EditarClienteComponent
+    EditarClienteComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,

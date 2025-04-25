@@ -1,1 +1,50 @@
-<p>editar-cliente works!</p>
+<form [formGroup]="clienteForm" (ngSubmit)="actualizarCliente()" class="formulario">
+  <div class="form-group">
+    <label for="nombre">Nombre</label>
+    <input id="nombre" type="text" formControlName="nombre" />
+    <div class="error" *ngIf="clienteForm.get('nombre')?.invalid && clienteForm.get('nombre')?.touched">
+      El nombre es obligatorio.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="apellido">Apellido</label>
+    <input id="apellido" type="text" formControlName="apellido" />
+    <div class="error" *ngIf="clienteForm.get('apellido')?.invalid && clienteForm.get('apellido')?.touched">
+      El apellido es obligatorio.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="numeroIdentificacion">NIT / DPI</label>
+    <input id="numeroIdentificacion" type="text" formControlName="numeroIdentificacion" />
+    <div class="error" *ngIf="clienteForm.get('numeroIdentificacion')?.invalid && clienteForm.get('numeroIdentificacion')?.touched">
+      El número de identificación es obligatorio.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="fechaNacimiento">Fecha de nacimiento</label>
+    <input id="fechaNacimiento" type="date" formControlName="fechaNacimiento" />
+    <div class="error" *ngIf="clienteForm.get('fechaNacimiento')?.invalid && clienteForm.get('fechaNacimiento')?.touched">
+      La fecha es obligatoria.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="direccion">Dirección</label>
+    <input id="direccion" type="text" formControlName="direccion" />
+  </div>
+
+  <div class="form-group">
+    <label for="correoElectronico">Correo electrónico</label>
+    <input id="correoElectronico" type="email" formControlName="correoElectronico" />
+  </div>
+
+  <div class="form-group">
+    <label for="telefono">Teléfono</label>
+    <input id="telefono" type="text" formControlName="telefono" />
+  </div>
+  <button type="submit" [disabled]="clienteForm.invalid">Actualizar Cliente</button>
+  <button type="button" (click)="cancelar()">Cancelar</button>
+</form>

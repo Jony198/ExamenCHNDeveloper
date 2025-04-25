@@ -16,14 +16,12 @@ services:
       - chn_net
 
   backend:
-    image: openjdk:17-jdk-slim
+    build:
+      context: ./BACKEND/demo   
+      dockerfile: Dockerfile    
     container_name: chn_backend
     depends_on:
       - sqlserver
-    volumes:
-      - ./target:/app
-    working_dir: /app
-    command: ["java", "-jar", "demo-0.0.1-SNAPSHOT.jar"]
     ports:
       - "8080:8080"
     environment:
@@ -34,6 +32,18 @@ services:
     networks:
       - chn_net
 
+
+  frontend:
+    build:
+      context: ./FRONTEND/frontend
+      dockerfile: Dockerfile
+    container_name: chn_frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
+    networks:
+      - chn_net
 volumes:
   sqlserver_data:
 

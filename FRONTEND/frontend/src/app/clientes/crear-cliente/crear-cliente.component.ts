@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {ClientesService} from "../clientes.service";
+import {ClientesService, BackendResponse} from "../clientes.service";
 
 @Component({
   selector: 'app-crear-cliente',
@@ -28,9 +28,21 @@ export class CrearClienteComponent implements OnInit {
   guardar(): void {
     if (this.clienteForm.valid) {
       this.clientesService.crear(this.clienteForm.value).subscribe({
-        next: (resp) => {
-          console.log('Cliente creado:', resp);
-          // redireccionar o mostrar mensaje
+        next: (response: BackendResponse) => {
+          console.log(response)
+          if (response.successful) {
+
+            window.alert("Cliente criado correctamente");
+            this.clienteForm.reset();
+          } else {
+            let MensajeError=""
+            for(let i = 0;i<response.errores.length;i++){
+              console.error(response.errores[i].mensaje);
+              MensajeError+=response.errores[i].mensaje;
+            }
+            window.alert(MensajeError);
+
+          }
         },
         error: (err) => {
           console.error('Error al crear cliente:', err);
