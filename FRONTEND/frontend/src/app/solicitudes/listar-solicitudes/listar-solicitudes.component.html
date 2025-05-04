@@ -1,0 +1,33 @@
+<h2 class="titulo-tabla">Listado de Solicitudes de Préstamo</h2>
+
+<table class="tabla-solicitudes">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>ID Cliente</th>
+    <th>Monto</th>
+    <th>Plazo (Meses)</th>
+    <th>Tasa de Interés</th>
+    <th>Fecha Solicitud</th>
+    <th>Estado</th>
+    <th>Motivo Rechazo</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let solicitud of solicitudes">
+    <td>{{ solicitud.idSolicitud }}</td>
+    <td>{{ solicitud.cliente.idCliente }}</td>
+    <td>{{ solicitud.monto }}</td>
+    <td>{{ solicitud.plazoEnMeses }}</td>
+    <td>{{ solicitud.tasaInteres }}%</td>
+    <td>{{ solicitud.fechaSolicitud | date:'shortDate' }}</td>
+    <td>{{ solicitud.estado }}</td>
+    <td>{{ solicitud.motivoRechazo || '-' }}</td>
+    <td>
+      <button class="btn-accion editar" *ngIf="solicitud.estado=='PENDIENTE'" (click)="editarSolicitud(solicitud.idSolicitud)">Aprobar/Rechazar</button>
+      <button class="btn-accion eliminar" *ngIf="solicitud.estado=='PENDIENTE'" (click)="eliminarSolicitud(solicitud.idSolicitud)">Eliminar</button>
+    </td>
+  </tr>
+  </tbody>
+</table>

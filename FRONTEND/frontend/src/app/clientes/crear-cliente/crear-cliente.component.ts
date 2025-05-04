@@ -20,7 +20,7 @@ export class CrearClienteComponent implements OnInit {
       numeroIdentificacion: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
       direccion: [''],
-      correoElectronico: [''],
+      correoElectronico: ['',[Validators.required, Validators.email]],
       telefono: ['']
     });
   }

@@ -1,9 +1,10 @@
 package com.examen.demo.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,27 +19,27 @@ public class Cliente {
     @Column(name = "idCliente")
     private Integer idCliente;
 
-    @Column(name = "nombre",nullable = false, length = 100)
+    @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(nullable = false, length = 100)
+    @Column(name = "apellido", nullable = false, length = 100)
     private String apellido;
 
-    @Column(name = "numeroIdentificacion", nullable = false, unique = true, length = 20)
+    @Column(name = "numeroIdentificacion", nullable = false, length = 20, unique = true)
     private String numeroIdentificacion;
 
-    @Column(nullable = false)
-    private LocalDate fechaNacimiento;
+    @Column(name = "fechaNacimiento", nullable = false)
+    private java.time.LocalDate fechaNacimiento;
 
-    @Column(length = 255)
+    @Column(name = "direccion", length = 255)
     private String direccion;
 
-    @Column(length = 100)
+    @Column(name = "correoElectronico", length = 100)
     private String correoElectronico;
 
-    @Column(length = 20)
+    @Column(name = "telefono", length = 20)
     private String telefono;
 
-    @Column(nullable = false)
-    private LocalDateTime fechaRegistro = LocalDateTime.now();
+    @Column(name = "fechaRegistro", columnDefinition = "DATETIME DEFAULT GETDATE()")
+    private LocalDateTime fechaRegistro;
 }

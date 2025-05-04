@@ -1,29 +1,31 @@
-<h2>Listado de Clientes</h2>
+<h2 class="titulo-tabla">Listado de Clientes</h2>
 
-<table>
-  <thead>
-  <tr>
-    <th>Nombre</th>
-    <th>Apellido</th>
-    <th>Identificación</th>
-    <th>Fecha de nacimiento</th>
-    <th>Correo</th>
-    <th>Teléfono</th>
-    <th>Acciones</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr *ngFor="let cliente of clientes">
-    <td>{{ cliente.nombre }}</td>
-    <td>{{ cliente.apellido }}</td>
-    <td>{{ cliente.numeroIdentificacion }}</td>
-    <td>{{ cliente.fechaNacimiento }}</td>
-    <td>{{ cliente.correoElectronico }}</td>
-    <td>{{ cliente.telefono }}</td>
-    <td>
-      <button (click)="editarCliente(cliente.idCliente)">Editar</button>
-      <button (click)="eliminarCliente(cliente.idCliente)">Eliminar</button>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<div class="table-container">
+  <table class="tabla-solicitudes">
+    <thead>
+    <tr>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Identificación</th>
+      <th>Fecha de nacimiento</th>
+      <th>Correo</th>
+      <th>Teléfono</th>
+      <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let cliente of clientes">
+      <td>{{ cliente.nombre }}</td>
+      <td>{{ cliente.apellido }}</td>
+      <td>{{ cliente.numeroIdentificacion }}</td>
+      <td>{{ cliente.fechaNacimiento | date:'shortDate' }}</td>
+      <td>{{ cliente.correoElectronico }}</td>
+      <td>{{ cliente.telefono }}</td>
+      <td>
+        <button class="btn-accion editar" (click)="editarCliente(cliente.idCliente)">Editar</button>
+        <button class="btn-accion eliminar" (click)="eliminarCliente(cliente.idCliente)">Eliminar</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

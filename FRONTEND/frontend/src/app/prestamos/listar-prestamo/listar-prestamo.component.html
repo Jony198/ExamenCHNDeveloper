@@ -1,0 +1,58 @@
+<div class="login-box">
+  <h2>Listado de Préstamos</h2>
+
+  <div class="user-box">
+    <p-dropdown
+      [options]="clientes"
+      [(ngModel)]="clienteSeleccionado"
+      optionLabel="nombreCompleto"
+      placeholder="Filtrar por cliente"
+      (onChange)="filtrarPorCliente()"
+      [showClear]="true"
+      [filter]="true"
+      filterPlaceholder="Buscar cliente..."
+      name="clienteFiltro"
+    >
+      <ng-template let-cliente pTemplate="item">
+        {{ cliente.numeroIdentificacion }} - {{ cliente.nombre }} {{ cliente.apellido }}
+      </ng-template>
+      <ng-template let-cliente pTemplate="selectedItem">
+        {{ cliente?.numeroIdentificacion }} - {{ cliente?.nombre }} {{ cliente?.apellido }}
+      </ng-template>
+    </p-dropdown>
+  </div>
+
+  <div class="table-container">
+    <table class="tabla-solicitudes">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Cliente</th>
+        <th>Monto solicitado</th>
+        <th>Monto pendiente</th>
+        <th>Interés</th>
+        <th>Plazo</th>
+        <th>Fecha</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let prestamo of prestamosFiltrados">
+        <td>{{ prestamo.idPrestamo }}</td>
+        <td>{{prestamo.solicitud.cliente.numeroIdentificacion}} {{ prestamo.solicitud.cliente?.nombre }} {{ prestamo.solicitud.cliente?.apellido }}</td>
+        <td>Q{{ prestamo.montoAprobado }}</td>
+        <td>Q{{ prestamo.saldoPendiente }}</td>
+        <td>{{ prestamo.solicitud.tasaInteres }}%</td>
+        <td>{{ prestamo.solicitud.plazoEnMeses }} meses</td>
+        <td>{{ prestamo.fechaAprobacion | date:'shortDate' }}</td>
+        <td>{{ prestamo.estado }}</td>
+        <td>
+          <button class="btn-accion editar" >Historial de pagos</button>
+          <button class="btn-accion editar" *ngIf="prestamo.estado=='VIGENTE'" >Registrar Pago</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

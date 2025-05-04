@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Cliente {
   idCliente?: number;
@@ -26,7 +27,8 @@ export interface ClienteResponse extends BackendResponse {
   providedIn: 'root'
 })
 export class ClientesService {
-  private apiUrl = 'http://localhost:8080/api/clientes';
+  private baseUrl = environment.apiUrl;
+  private apiUrl = this.baseUrl+'/clientes';
 
   constructor(private http: HttpClient) {}
 

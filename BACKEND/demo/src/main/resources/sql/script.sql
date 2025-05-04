@@ -4,76 +4,65 @@
 IF OBJECT_ID('Cliente', 'U') IS NULL
 BEGIN
 CREATE TABLE Cliente (
-                         idCliente INT IDENTITY(1,1) PRIMARY KEY,
+                         idCliente INT PRIMARY KEY IDENTITY(1,1),
                          nombre NVARCHAR(100) NOT NULL,
                          apellido NVARCHAR(100) NOT NULL,
-                         numeroIdentificacion NVARCHAR(20) NOT NULL UNIQUE,
-                         fechaNacimiento DATE NOT NULL,
-                         direccion NVARCHAR(255),
+                         numeroIdentificacion NVARCHAR(50) NOT NULL UNIQUE,
+                         direccion NVARCHAR(200),
                          correoElectronico NVARCHAR(100),
                          telefono NVARCHAR(20),
+                         fechaNacimiento DATE,
                          fechaRegistro DATETIME DEFAULT GETDATE()
 );
 END
 
 -- ==============================================
--- Tabla: Cuenta
+-- Tabla: SolicitudPrestamo
 -- ==============================================
-IF OBJECT_ID('Cuenta', 'U') IS NULL
+IF OBJECT_ID('SolicitudPrestamo', 'U') IS NULL
 BEGIN
-CREATE TABLE Cuenta (
-                        idCuenta INT IDENTITY(1,1) PRIMARY KEY,
-                        idCliente INT NOT NULL,
-                        tipoCuenta NVARCHAR(20) NOT NULL CHECK (tipoCuenta IN ('ahorro', 'monetaria')),
-                        montoApertura DECIMAL(18, 2) NOT NULL,
-                        estadoCuenta NVARCHAR(20) NOT NULL DEFAULT 'activa',
-                        motivoEstadoCuenta NVARCHAR(255) NULL,
-                        fechaCreacion DATETIME DEFAULT GETDATE(),
-                        FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente)
+CREATE TABLE SolicitudPrestamo (
+                                   idSolicitud INT PRIMARY KEY IDENTITY(1,1),
+                                   idCliente INT NOT NULL,
+                                   monto DECIMAL(18,2) NOT NULL,
+                                   plazoEnMeses INT NOT NULL,
+                                   tasaInteres DECIMAL(5,2) NOT NULL,
+                                   fechaSolicitud DATE NOT NULL DEFAULT GETDATE(),
+                                   estado NVARCHAR(20) NOT NULL CHECK (estado IN ('PENDIENTE', 'APROBADO', 'RECHAZADO')),
+                                   motivoRechazo NVARCHAR(255),
+
+                                   CONSTRAINT FK_Solicitud_Cliente FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE CASCADE
 );
 END
 
 -- ==============================================
--- Tabla: Chequera
+-- Tabla: Prestamo
 -- ==============================================
-IF OBJECT_ID('Chequera', 'U') IS NULL
+IF OBJECT_ID('Prestamo', 'U') IS NULL
 BEGIN
-CREATE TABLE Chequera (
-                          idChequera INT IDENTITY(1,1) PRIMARY KEY,
-                          idCuenta INT NOT NULL,
-                          cantidadCheques INT NOT NULL,
-                          estadoChequera NVARCHAR(20) NOT NULL DEFAULT 'activa',
-                          motivoEstadoChequera NVARCHAR(255) NULL,
-                          fechaCreacion DATETIME DEFAULT GETDATE(),
-                          FOREIGN KEY (idCuenta) REFERENCES Cuenta(idCuenta)
+CREATE TABLE Prestamo (
+                          idPrestamo INT PRIMARY KEY IDENTITY(1,1),
+                          idSolicitud INT NOT NULL UNIQUE,
+                          montoAprobado DECIMAL(18,2) NOT NULL,
+                          fechaAprobacion DATE NOT NULL DEFAULT GETDATE(),
+                          saldoPendiente DECIMAL(18,2) NOT NULL,
+                          estado NVARCHAR(20) NOT NULL CHECK (estado IN ('VIGENTE', 'FINIQUITADO')),
+
+                          CONSTRAINT FK_Prestamo_Solicitud FOREIGN KEY (idSolicitud) REFERENCES SolicitudPrestamo(idSolicitud) ON DELETE CASCADE
 );
 END
 
 -- ==============================================
--- Tabla: Cheque
+-- Tabla: Pago
 -- ==============================================
-IF OBJECT_ID('Cheque', 'U') IS NULL
+IF OBJECT_ID('Pago', 'U') IS NULL
 BEGIN
-CREATE TABLE Cheque (
-                        idCheque INT IDENTITY(1,1) PRIMARY KEY,
-                        idChequera INT NOT NULL,
-                        numeroCheque INT NOT NULL,
-                        estadoCheque NVARCHAR(20) NOT NULL DEFAULT 'emitido',
-                        motivoEstadoCheque NVARCHAR(255) NULL,
-                        monto DECIMAL(18,2) NULL,
-                        fechaMovimiento DATETIME NULL,
-                        FOREIGN KEY (idChequera) REFERENCES Chequera(idChequera)
+CREATE TABLE Pago (
+                      idPago INT PRIMARY KEY IDENTITY(1,1),
+                      idPrestamo INT NOT NULL,
+                      montoPagado DECIMAL(18,2) NOT NULL,
+                      fechaPago DATETIME NOT NULL DEFAULT GETDATE(),
+
+                      CONSTRAINT FK_Pago_Prestamo FOREIGN KEY (idPrestamo) REFERENCES Prestamo(idPrestamo) ON DELETE CASCADE
 );
 END
-
--- ==============================================
--- Índices para mejorar rendimiento
--- ==============================================
-IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_Cuenta_Cliente')
-CREATE INDEX idx_Cuenta_Cliente ON Cuenta(idCliente);
-
-IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_Chequera_Cuenta')
-CREATE INDEX idx_Chequera_Cuenta ON Chequera(idCuenta);
-
-IF NOT EXISTS (SELECT name FROM sys.indexes WHERE name = 'idx_Cheque_Chequera')
-CREATE INDEX idx_Cheque_Chequera ON Cheque(idChequera);

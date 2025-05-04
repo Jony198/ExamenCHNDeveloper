@@ -1,0 +1,69 @@
+<div class="login-box">
+  <h2>Revisar Solicitud</h2>
+
+  <form (ngSubmit)="guardar()">
+
+    <div class="user-box">
+      <input type="text" [value]="solicitud.cliente?.nombre + ' ' + solicitud.cliente?.apellido" disabled />
+      <label>Cliente</label>
+    </div>
+
+    <div class="user-box">
+      <input type="number" [value]="solicitud.monto" disabled />
+      <label>Monto</label>
+    </div>
+
+    <div class="user-box">
+      <input type="number" [value]="solicitud.plazoEnMeses" disabled />
+      <label>Plazo (meses)</label>
+    </div>
+
+    <div class="user-box">
+      <input type="number" [value]="solicitud.tasaInteres" disabled />
+      <label>Tasa de interés (%)</label>
+    </div>
+
+    <div class="user-box">
+      <p-dropdown
+        [options]="[
+    { label: 'Aprobar', value: 'APROBADO' },
+    { label: 'Rechazar', value: 'RECHAZADO' }
+  ]"
+        [ngModel]="decision"
+        (onChange)="onDecisionChange($event.value)"
+        name="decision"
+        placeholder="Seleccione una decisión"
+        optionLabel="label"
+        inputId="decision"
+      >
+        <ng-template let-option pTemplate="item">
+        {{ option.value}}
+        </ng-template>
+        <ng-template let-option pTemplate="selectedItem">
+          {{ option.value}}
+        </ng-template>
+
+      </p-dropdown>
+
+    </div>
+
+    <div class="user-box" *ngIf="decision === 'RECHAZADO'">
+      <textarea
+        [(ngModel)]="motivoRechazo"
+        name="motivoRechazo"
+        rows="3"
+        placeholder="Ingrese el motivo de rechazo"
+        class="textarea-rechazo"
+      ></textarea>
+    </div>
+
+    <button type="submit" [disabled]="cargando" *ngIf="solicitud.estado=='PENDIENTE'" class="submit-button">
+      <span></span><span></span><span></span><span></span>
+      Guardar
+    </button>
+
+    <button type="button" class="submit-button" (click)="cancelar()">Cancelar</button>
+
+    <p-toast></p-toast>
+  </form>
+</div>

@@ -1,0 +1,82 @@
+<div class="login-box">
+  <h2>Crear Solicitud de Préstamo</h2>
+
+  <form (ngSubmit)="crear()">
+    <!-- Cliente -->
+    <label>Cliente</label>
+    <div class="user-box">
+
+      <p-dropdown
+        [options]="clientes"
+        [(ngModel)]="solicitud.cliente"
+        id="idCliente"
+        name="idCliente"
+        optionLabel="nombre"
+        placeholder="Seleccione un cliente"
+        [showClear]="true"
+        [filter]="true"
+        [filterFields]="['numeroIdentificacion','nombre']"
+        filterPlaceholder="Buscar cliente"
+        [style]="{ 'width': '100%', 'color': '#fff' }"
+        [panelStyle]="{ 'background': '#333' }"
+        appendTo="body"
+      >
+        <ng-template let-cliente pTemplate="item">
+          {{ cliente.numeroIdentificacion }} - {{ cliente.nombre }} {{ cliente.apellido }}
+        </ng-template>
+        <ng-template let-cliente pTemplate="selectedItem">
+          {{ cliente?.numeroIdentificacion }} - {{ cliente?.nombre }} {{ cliente?.apellido }}
+        </ng-template>
+      </p-dropdown>
+
+    </div>
+    <br>
+    <!-- Monto -->
+    <div class="user-box">
+      <input
+        type="number"
+        [(ngModel)]="solicitud.monto"
+        name="monto"
+        #montoRef="ngModel"
+        required
+        min="1"
+      />
+      <label>Monto</label>
+      <div class="error" *ngIf="montoRef.invalid && montoRef.touched">
+        El monto debe ser mayor a 0.
+      </div>
+    </div>
+
+    <!-- Plazo -->
+    <div class="user-box">
+      <input
+        type="number"
+        [(ngModel)]="solicitud.plazoEnMeses"
+        name="plazoEnMeses"
+        #plazoRef="ngModel"
+        required
+        min="1"
+      />
+      <label>Plazo (meses)</label>
+      <div class="error" *ngIf="plazoRef.invalid && plazoRef.touched">
+        El plazo debe ser mayor a 0.
+      </div>
+    </div>
+
+    <!-- Tasa de Interés -->
+    <div class="user-box">
+      <input type="number" [(ngModel)]="solicitud.tasaInteres" name="tasaInteres" step="0.01" required />
+      <label>Tasa de Interés (%)</label>
+    </div>
+
+    <!-- Botones -->
+    <button type="submit" class="submit-button">
+      <span></span><span></span><span></span><span></span>
+      Guardar
+    </button>
+    <button type="button" class="submit-button-cancelar" (click)="cancelar()">
+      <span></span><span></span><span></span><span></span>
+      Cancelar
+    </button>
+  </form>
+</div>
