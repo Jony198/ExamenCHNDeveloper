@@ -1,12 +1,13 @@
-# 🏦 CHN - Sistema Web de Cuentas y Chequeras
+# 🏦 CHN - Sistema Web de Préstamos
 
-Proyecto práctico para la administración de clientes, cuentas, chequeras y cheques, desarrollado en Java 17 con Spring Boot y SQL Server.
+Proyecto práctico para la administración de clientes, solicitudes de préstamo, préstamos y pagos, desarrollado en Java 17 con Spring Boot y SQL Server.
 
 ## 📦 Tecnologías
 - Java 17
 - Spring Boot
 - Spring Data JPA
 - SQL Server (2019)
+- Angular + PrimeNG
 - Docker + Docker Compose
 - Lombok
 - JUnit + Mockito
@@ -31,49 +32,44 @@ cd chn-backend
 
 ### 2. Levantar todo el entorno
 ```bash
-docker-compose up --build
+docker-compose up -d
 ```
 
 Esto levanta:
 - **SQL Server** en `localhost:1433`
 - **Backend Spring Boot** en `http://localhost:8080`
+- **Frontend Angular** en `http://localhost:4200`
 
 ---
 
 ## 🔧 Endpoints disponibles
 
-| Método | URL                          | Descripción                        |
-|--------|------------------------------|------------------------------------|
-| GET    | `/api/clientes`             | Listar clientes                    |
-| POST   | `/api/clientes`             | Crear cliente                      |
-| PUT    | `/api/clientes/{id}`        | Actualizar cliente                 |
-| DELETE | `/api/clientes/{id}`        | Eliminar cliente                   |
-| GET    | `/api/cuentas/cliente/{id}` | Listar cuentas por cliente         |
-| POST   | `/api/cuentas`              | Crear cuenta                       |
-| PUT    | `/api/cuentas/{id}`         | Actualizar cuenta                  |
-| DELETE | `/api/cuentas/{id}`         | Eliminar cuenta                    |
-| GET    | `/api/chequeras/cuenta/{id}`| Listar chequeras por cuenta        |
-| POST   | `/api/chequeras`            | Crear chequera                     |
-| PUT    | `/api/chequeras/{id}`       | Actualizar chequera                |
-| DELETE | `/api/chequeras/{id}`       | Eliminar chequera                  |
-| GET    | `/api/cheques/chequera/{id}`| Listar cheques por chequera        |
-| POST   | `/api/cheques`              | Crear cheque                       |
-| PUT    | `/api/cheques/{id}`         | Actualizar cheque                  |
-| DELETE | `/api/cheques/{id}`         | Eliminar cheque                    |
+| Método | URL                                      | Descripción                          |
+|--------|------------------------------------------|--------------------------------------|
+| GET    | `/api/clientes`                         | Listar clientes                      |
+| POST   | `/api/clientes`                         | Crear cliente                        |
+| PUT    | `/api/clientes/{id}`                    | Actualizar cliente                   |
+| DELETE | `/api/clientes/{id}`                    | Eliminar cliente                     |
+| GET    | `/api/solicitudes`                      | Listar solicitudes de préstamo       |
+| GET    | `/api/solicitudes/{id}`                 | Obtener solicitud por ID             |
+| POST   | `/api/solicitudes`                      | Crear solicitud                      |
+| PUT    | `/api/solicitudes/estado`               | Aprobar o rechazar solicitud         |
+| GET    | `/api/prestamos`                        | Listar préstamos                     |
+| GET    | `/api/prestamos/{id}`                   | Obtener préstamo por ID              |
+| POST   | `/api/prestamos`                        | Crear préstamo (a partir de solicitud) |
+| DELETE | `/api/prestamos/{id}`                   | Eliminar préstamo                    |
+| GET    | `/api/pagos/historial/{idPrestamo}`     | Obtener historial de pagos           |
+| POST   | `/api/pagos`                            | Registrar nuevo pago                 |
 
 ---
 
-## 🧪 Pruebas Unitarias
 
-```bash
-mvn test
-```
 
 Incluye pruebas para:
 - ClienteService
-- CuentaService
-- ChequeraService
-- ChequeService
+- SolicitudPrestamoService
+- PrestamoService
+- PagoService
 
 ---
 
@@ -84,9 +80,9 @@ src/
 ├── main/java/com/examen/demo
 │   ├── controller
 │   ├── entity          # ErrorEntity, ErrorList, AbstractResponse
-│   ├── model           # Cliente, Cuenta, Chequera, Cheque
+│   ├── model           # Cliente, SolicitudPrestamo, Prestamo, Pago
 │   ├── repository
-│   ├── response        # ClienteResponse, CuentaResponse, etc.
+│   ├── response        # ClienteResponse, SolicitudPrestamoResponse, etc.
 │   └── service
 ├── resources/
 │   └── application.properties
@@ -101,7 +97,3 @@ src/
 - Usuario de SQL Server: `sa`
 - Contraseña: `Password12345`
 - Base de datos: `BancoCHN`
-
----
-
-
