@@ -42,6 +42,10 @@ Esto levanta:
 
 ---
 
+## Entidad Relacion
+
+![imagen](./IMAGENES/ER.png)
+
 ## 🔧 Endpoints disponibles
 
 | Método | URL                                      | Descripción                          |
