@@ -57,7 +57,7 @@ export class AprobarSolicitudComponent implements OnInit {
       this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'Debe ingresar el motivo de rechazo' });
       return;
     }
-debugger
+
     this.cargando = true;
     const estado = this.decision;
     const motivo = this.decision === 'RECHAZADO' ? this.motivoRechazo : '';
