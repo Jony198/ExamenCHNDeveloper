@@ -31,6 +31,8 @@
         <th>Monto solicitado</th>
         <th>Monto pendiente</th>
         <th>Interés</th>
+        <th>Intereses pagados</th>
+        <th>Cuota</th>
         <th>Plazo</th>
         <th>Fecha</th>
         <th>Estado</th>
@@ -44,12 +46,17 @@
         <td>Q{{ prestamo.montoAprobado }}</td>
         <td>Q{{ prestamo.saldoPendiente }}</td>
         <td>{{ prestamo.solicitud.tasaInteres }}%</td>
+        <td>Q{{ prestamo.interesesPagados }}</td>
+        <td>Q{{ prestamo.cuota }}</td>
         <td>{{ prestamo.solicitud.plazoEnMeses }} meses</td>
         <td>{{ prestamo.fechaAprobacion | date:'shortDate' }}</td>
         <td>{{ prestamo.estado }}</td>
         <td>
-          <button class="btn-accion editar" >Historial de pagos</button>
-          <button class="btn-accion editar" *ngIf="prestamo.estado=='VIGENTE'" >Registrar Pago</button>
+          <button class="btn-accion editar" (click)="verHistorial(prestamo.idPrestamo)">
+            Historial de pagos
+          </button>
+
+          <button class="btn-accion editar" *ngIf="prestamo.estado=='VIGENTE'" (click)="RealizarPago(prestamo.idPrestamo)">Registrar Pago</button>
         </td>
       </tr>
       </tbody>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { PrestamosService, Prestamo } from '../prestamos.service';
 import { ClientesService, Cliente } from '../../clientes/clientes.service';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-listar-prestamo',
@@ -15,9 +16,15 @@ export class ListarPrestamoComponent implements OnInit {
 
   constructor(
     private prestamosService: PrestamosService,
-    private clientesService: ClientesService
+    private clientesService: ClientesService,
+    private router: Router
   ) {}
-
+  verHistorial(idPrestamo: number) {
+    this.router.navigate(['/prestamos/historial', idPrestamo]);
+  }
+  RealizarPago(idPrestamo: number) {
+    this.router.navigate(['/prestamos/realizarpago', idPrestamo]);
+  }
   ngOnInit(): void {
     this.prestamosService.listar().subscribe(response => {
       if (response.successful) {

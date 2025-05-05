@@ -9,6 +9,8 @@ import { ListarSolicitudesComponent } from './solicitudes/listar-solicitudes/lis
 import { CrearSolicitudComponent} from "./solicitudes/crear-solicitud/crear-solicitud.component";
 import { AprobarSolicitudComponent} from "./solicitudes/aprobar-solicitud/aprobar-solicitud.component";
 import { ListarPrestamoComponent} from "./prestamos/listar-prestamo/listar-prestamo.component";
+import { HistorialPagosComponent} from "./prestamos/historial-pagos/historial-pagos.component";
+import {RealizarPagoComponent} from "./prestamos/realizar-pago/realizar-pago.component";
 
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
@@ -26,6 +28,8 @@ const routes: Routes = [
   { path: 'solicitudes/nuevo', component: CrearSolicitudComponent },
   { path: 'solicitudes/aprobar/:id', component: AprobarSolicitudComponent },
   { path: 'prestamos', component: ListarPrestamoComponent },
+  { path: 'prestamos/historial/:id', component: HistorialPagosComponent },
+  { path: 'prestamos/realizarpago/:id', component: RealizarPagoComponent },
   { path: '', redirectTo: 'clientes', pathMatch: 'full' }
 ];
 
@@ -39,7 +43,9 @@ const routes: Routes = [
     ListarSolicitudesComponent,
     CrearSolicitudComponent,
     AprobarSolicitudComponent,
-    ListarPrestamoComponent
+    ListarPrestamoComponent,
+    HistorialPagosComponent,
+    RealizarPagoComponent
   ],
   imports: [
     BrowserModule,

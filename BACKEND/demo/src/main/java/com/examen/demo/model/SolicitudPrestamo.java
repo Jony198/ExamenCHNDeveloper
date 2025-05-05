@@ -29,7 +29,7 @@ public class SolicitudPrestamo {
     private Integer plazoEnMeses;
 
     @Column(name = "tasaInteres", nullable = false)
-    private BigDecimal tasaInteres;
+    private double tasaInteres;
 
     @Column(name = "fechaSolicitud", nullable = false)
     private LocalDateTime fechaSolicitud;

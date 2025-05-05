@@ -1,0 +1,26 @@
+<div class="login-box">
+  <h2>Historial de Pagos de Prestamo No. {{this.idPrestamo}}</h2>
+  <button class="btn-accion" (click)="Regresar()">regresar</button>
+  <div class="table-container">
+    <table class="tabla-solicitudes">
+      <thead>
+      <tr>
+        <th>ID Pago</th>
+        <th>Monto Pagado</th>
+        <th>Capital</th>
+        <th>Intereses</th>
+        <th>Fecha de Pago</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let pago of pagos">
+        <td>{{ pago.idPago }}</td>
+        <td>Q{{ pago.montoPagado }}</td>
+        <td>Q{{ pago.pagoCapital }}</td>
+        <td>Q{{ pago.intereses }}</td>
+        <td>{{ pago.fechaPago | date:'short' }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

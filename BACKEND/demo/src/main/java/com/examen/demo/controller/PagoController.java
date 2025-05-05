@@ -29,8 +29,9 @@ public class PagoController {
         return pagoService.guardar(pago);
     }
 
-    @DeleteMapping("/{id}")
-    public PagoResponse eliminarPago(@PathVariable Integer id) {
-        return pagoService.eliminar(id);
+    @GetMapping("/historial/{idPrestamo}")
+    public PagoResponse obtenerHistorial(@PathVariable Integer idPrestamo) {
+        return pagoService.getHistorialPagos(idPrestamo);
     }
+
 }

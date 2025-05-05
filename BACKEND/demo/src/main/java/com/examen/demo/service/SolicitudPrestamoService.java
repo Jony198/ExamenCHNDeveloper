@@ -10,6 +10,8 @@ import com.examen.demo.response.SolicitudPrestamoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -68,7 +70,7 @@ public class SolicitudPrestamoService {
         ErrorList errores = new ErrorList();
         try {
             Optional<SolicitudPrestamo> optional = solicitudRepository.findById(solicitudInput.getIdSolicitud());
-            if (!optional.isPresent()) {
+            if (optional.isEmpty()) {
                 errores.addError(new ErrorEntity("Solicitud no encontrada con ID: " + solicitudInput.getIdSolicitud()), "actualizarEstado", INSTANCE);
                 return new SolicitudPrestamoResponse(errores);
             }
@@ -105,6 +107,29 @@ public class SolicitudPrestamoService {
                 prestamo.setFechaAprobacion(LocalDateTime.now());
                 prestamo.setMontoAprobado(solicitud.getMonto());
                 prestamo.setSaldoPendiente(solicitud.getMonto());
+                prestamo.setInteresesPagados(new BigDecimal(0));
+
+
+                BigDecimal monto = solicitud.getMonto(); // Monto del préstamo
+                double tasaAnual = solicitud.getTasaInteres(); // Tasa nominal anual (%)
+                int meses = solicitud.getPlazoEnMeses(); // Plazo en meses
+
+                if(solicitud.getTasaInteres()!=0) {
+                    // Convertimos tasa anual a tasa mensual como BigDecimal
+                    BigDecimal tasaMensual = BigDecimal.valueOf(tasaAnual)
+                            .divide(BigDecimal.valueOf(12 * 100), 10, RoundingMode.HALF_UP);
+
+                    // (1 + tasaMensual) ^ -meses
+                    BigDecimal unoMasTasa = BigDecimal.ONE.add(tasaMensual);
+                    BigDecimal divisorPotencia = unoMasTasa.pow(-meses, new java.math.MathContext(10)); // ^ -meses
+                    BigDecimal divisor = BigDecimal.ONE.subtract(divisorPotencia);
+
+                    // cuota = monto * tasaMensual / (1 - (1 + tasa)^-n)
+                    BigDecimal cuota = monto.multiply(tasaMensual).divide(divisor, 2, RoundingMode.HALF_UP);
+                    prestamo.setCuota(cuota);
+                }else {
+                    prestamo.setCuota(monto.divide(BigDecimal.valueOf(meses), 2, RoundingMode.HALF_UP));
+                }
                 prestamoRepository.save(prestamo);
             }
             return new SolicitudPrestamoResponse(List.of(solicitud));

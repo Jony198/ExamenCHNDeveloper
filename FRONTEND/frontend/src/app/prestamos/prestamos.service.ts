@@ -5,11 +5,13 @@ import { environment } from '../../environments/environment';
 
 export interface Prestamo {
   solicitud: any;
-  idPrestamo?: number;
-  monto: number;
-  tasaInteres: number;
-  plazoEnMeses: number;
-  fechaPrestamo?: string;
+  idPrestamo: number;
+  montoAprobado: number;
+  fechaAprobacion: string;
+  cuota: number;
+  interesesPagados: number;
+  saldoPendiente: number;
+  estado:string;
 }
 
 export interface BackendResponse {
@@ -23,6 +25,9 @@ export interface BackendResponse {
 export interface PrestamoResponse extends BackendResponse {
   prestamos?: any;
 }
+export interface PagoResponse extends BackendResponse {
+  pagos?: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +35,7 @@ export interface PrestamoResponse extends BackendResponse {
 export class PrestamosService {
   private baseUrl = environment.apiUrl;
   private apiUrl = `${this.baseUrl}/prestamos`;
-
+  private pagosUrl = `${this.baseUrl}/pagos`;
   constructor(private http: HttpClient) {}
 
   listar(): Observable<PrestamoResponse> {
@@ -47,5 +52,11 @@ export class PrestamosService {
 
   eliminar(id: number): Observable<BackendResponse> {
     return this.http.delete<BackendResponse>(`${this.apiUrl}/${id}`);
+  }
+  obtenerHistorialPagos(idPrestamo: number): Observable<PagoResponse> {
+    return this.http.get<PagoResponse>(`${this.pagosUrl}/historial/${idPrestamo}`);
+  }
+  guardarPago(pago: any): Observable<BackendResponse> {
+    return this.http.post<BackendResponse>(`${this.pagosUrl}`, pago);
   }
 }

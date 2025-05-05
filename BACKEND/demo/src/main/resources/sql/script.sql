@@ -46,6 +46,8 @@ CREATE TABLE Prestamo (
                           montoAprobado DECIMAL(18,2) NOT NULL,
                           fechaAprobacion DATE NOT NULL DEFAULT GETDATE(),
                           saldoPendiente DECIMAL(18,2) NOT NULL,
+                          interesesPagados DECIMAL(18,2) NOT NULL,
+                          cuota DECIMAL(18,2) NOT NULL,
                           estado NVARCHAR(20) NOT NULL CHECK (estado IN ('VIGENTE', 'FINIQUITADO')),
 
                           CONSTRAINT FK_Prestamo_Solicitud FOREIGN KEY (idSolicitud) REFERENCES SolicitudPrestamo(idSolicitud) ON DELETE CASCADE
@@ -61,6 +63,8 @@ CREATE TABLE Pago (
                       idPago INT PRIMARY KEY IDENTITY(1,1),
                       idPrestamo INT NOT NULL,
                       montoPagado DECIMAL(18,2) NOT NULL,
+                      pagoCapital DECIMAL(18,2) NOT NULL,
+                      intereses DECIMAL(18,2),
                       fechaPago DATETIME NOT NULL DEFAULT GETDATE(),
 
                       CONSTRAINT FK_Pago_Prestamo FOREIGN KEY (idPrestamo) REFERENCES Prestamo(idPrestamo) ON DELETE CASCADE

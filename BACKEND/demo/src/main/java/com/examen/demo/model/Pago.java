@@ -24,8 +24,14 @@ public class Pago {
     @JoinColumn(name = "idPrestamo", nullable = false)
     private Prestamo prestamo;
 
-    @Column(name = "montoPagado", nullable = false)
+    @Column(name = "montoPagado", nullable = false, precision = 18, scale = 2)
     private BigDecimal montoPagado;
+
+    @Column(name = "pagoCapital", nullable = false, precision = 18, scale = 2)
+    private BigDecimal pagoCapital;
+
+    @Column(name = "intereses", nullable = false, precision = 18, scale = 2)
+    private BigDecimal intereses;
 
     @Column(name = "fechaPago", nullable = false)
     private LocalDateTime fechaPago = LocalDateTime.now();

@@ -32,6 +32,12 @@ public class Prestamo {
     @Column(name = "saldoPendiente", nullable = false, precision = 18, scale = 2)
     private BigDecimal saldoPendiente;
 
+    @Column(name = "interesesPagados", nullable = false, precision = 18, scale = 2)
+    private BigDecimal interesesPagados;
+
+    @Column(name = "cuota", nullable = false, precision = 18, scale = 2)
+    private BigDecimal cuota;
+
     @Column(name = "estado", nullable = false, length = 20)
     private String estado;
 }

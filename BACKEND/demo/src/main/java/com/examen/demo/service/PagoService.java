@@ -65,9 +65,10 @@ public class PagoService {
 
             // Actualizar saldo pendiente
             prestamo.setSaldoPendiente(prestamo.getSaldoPendiente().subtract(pago.getMontoPagado()));
+            prestamo.setInteresesPagados(prestamo.getInteresesPagados().add(pago.getIntereses()));
 
             // Si se finiquita
-            if (prestamo.getSaldoPendiente().compareTo(BigDecimal.ZERO) == 0) {
+            if (prestamo.getSaldoPendiente().compareTo(BigDecimal.ZERO) <= 0) {
                 prestamo.setEstado("FINIQUITADO");
             }
 
@@ -82,18 +83,23 @@ public class PagoService {
     }
 
 
-    public PagoResponse eliminar(Integer idPago) {
+
+    public PagoResponse getHistorialPagos(Integer idPrestamo) {
         ErrorList errores = new ErrorList();
         try {
-            if (!pagoRepository.existsById(idPago)) {
-                errores.addError(new ErrorEntity("Pago no encontrado para eliminar"), "eliminar", INSTANCE);
+            Optional<Prestamo> prestamoOpt = prestamoRepository.findById(idPrestamo);
+            if (prestamoOpt.isEmpty()) {
+                errores.addError(new ErrorEntity("No se encontró el préstamo con ID: " + idPrestamo), "getHistorialPagos", INSTANCE);
                 return new PagoResponse(errores);
             }
-            pagoRepository.deleteById(idPago);
-            return new PagoResponse(List.of());
+
+            List<Pago> historial = pagoRepository.findByPrestamo_IdPrestamo(idPrestamo);
+            return new PagoResponse(historial);
+
         } catch (Exception e) {
-            errores.addCatchError(new ErrorEntity("Error al eliminar el pago"), "eliminar", INSTANCE, e);
+            errores.addCatchError(new ErrorEntity("Error al obtener el historial de pagos"), "getHistorialPagos", INSTANCE, e);
             return new PagoResponse(errores);
         }
     }
+
 }
